@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undangan Pernikahan — Muhammad & Nura</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Lato:wght@300;400&family=Amiri:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --matcha: #6B8C5A;
+    --matcha-deep: #4A6640;
+    --matcha-mid: #7FA06A;
+    --matcha-pale: #B8D4A8;
+    --matcha-light: #D8EAC8;
+    --gold: #C9A84C;
+    --gold-light: #E4C97A;
+    --cream: #F5F7F0;
+    --off-white: #FAFCF5;
+    --text-dark: #243020;
+    --text-mid: #3D5535;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: var(--cream);
+    color: var(--text-dark);
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* BOTANICAL */
+  .botanical-top, .botanical-bottom {
+    position: fixed; pointer-events: none; z-index: 10; opacity: 0.5;
+  }
+  .botanical-top { top: 0; left: 0; width: 240px; }
+  .botanical-bottom { bottom: 0; right: 0; width: 240px; transform: rotate(180deg); }
+
+  /* GOLD FRAME */
+  .frame-border { position: fixed; pointer-events: none; z-index: 5; }
+  .frame-tl { top:16px; left:16px; width:60px; height:60px; border-top:1px solid rgba(201,168,76,0.35); border-left:1px solid rgba(201,168,76,0.35); }
+  .frame-tr { top:16px; right:16px; width:60px; height:60px; border-top:1px solid rgba(201,168,76,0.35); border-right:1px solid rgba(201,168,76,0.35); }
+  .frame-bl { bottom:16px; left:16px; width:60px; height:60px; border-bottom:1px solid rgba(201,168,76,0.35); border-left:1px solid rgba(201,168,76,0.35); }
+  .frame-br { bottom:16px; right:16px; width:60px; height:60px; border-bottom:1px solid rgba(201,168,76,0.35); border-right:1px solid rgba(201,168,76,0.35); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 80px 24px 60px; position: relative;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(107,140,90,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .bismillah {
+    font-family: 'Amiri', serif; font-size: clamp(1.4rem,4vw,2rem);
+    color: var(--gold); letter-spacing: 0.05em; margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 1s ease 0.3s forwards;
+  }
+  .hero-label {
+    font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--matcha-deep); margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 1s ease 0.6s forwards;
+  }
+  .names {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300;
+    font-size: clamp(3.2rem,12vw,6.5rem); line-height: 1; color: var(--text-dark);
+    opacity: 0; animation: fadeUp 1s ease 0.8s forwards;
+  }
+  .names .amp {
+    font-style: italic; color: var(--gold); font-size: 0.6em;
+    display: block; margin: 8px 0; font-weight: 400;
+  }
+  .gold-line {
+    width: 80px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 28px auto; opacity: 0; animation: fadeIn 1s ease 1.2s forwards;
+  }
+  .hero-date {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(1rem,3vw,1.3rem);
+    font-weight: 400; color: var(--text-mid); letter-spacing: 0.08em;
+    opacity: 0; animation: fadeUp 1s ease 1.4s forwards;
+  }
+  .scroll-hint {
+    position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    opacity: 0; animation: fadeIn 1.5s ease 2s forwards;
+  }
+  .scroll-hint span { font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--matcha-deep); }
+  .scroll-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); animation: bounce 1.6s ease infinite; }
+
+  /* ORANG TUA */
+  .parents-section {
+    background: var(--off-white); padding: 60px 24px; text-align: center;
+  }
+  .section-eyebrow {
+    font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem,5vw,2.8rem);
+    font-weight: 300; color: var(--text-dark); margin-bottom: 40px;
+  }
+  .parents-grid {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    gap: 24px; max-width: 680px; margin: 0 auto; align-items: center;
+  }
+  .parent-block { text-align: center; }
+  .parent-role {
+    font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--matcha); margin-bottom: 12px;
+  }
+  .parent-name {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
+    font-weight: 500; line-height: 1.6; color: var(--text-dark);
+  }
+  .parents-divider {
+    width: 1px; height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  }
+  .child-name {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 1.5rem; color: var(--matcha-deep); margin-bottom: 4px;
+  }
+  .child-sub { font-size: 0.7rem; color: var(--matcha); letter-spacing: 0.12em; }
+
+  @media (max-width: 520px) {
+    .parents-grid { grid-template-columns: 1fr; }
+    .parents-divider { width: 60px; height: 1px; margin: 0 auto; }
+  }
+
+  /* AYAT */
+  .ayat-section { padding: 72px 24px; background: var(--cream); }
+  .ayat-block {
+    max-width: 640px; margin: 0 auto 52px; text-align: center;
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .ayat-block.visible { opacity: 1; transform: translateY(0); }
+  .ayat-ref { font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+  .ayat-arabic {
+    font-family: 'Amiri', serif; font-size: clamp(1.35rem,4vw,1.85rem);
+    line-height: 2.2; color: var(--matcha-deep); margin-bottom: 20px; direction: rtl;
+  }
+  .ayat-divider { width: 40px; height: 1px; background: var(--gold); margin: 16px auto; opacity: 0.5; }
+  .ayat-terjemah {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: clamp(0.95rem,2.5vw,1.12rem); line-height: 1.85; color: var(--text-mid);
+  }
+
+  /* COUNTDOWN */
+  .countdown-section {
+    background: var(--matcha-deep); padding: 72px 24px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .countdown-section::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .countdown-title {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(1.4rem,4vw,2rem);
+    font-weight: 300; color: var(--matcha-light); letter-spacing: 0.1em; margin-bottom: 40px;
+  }
+  .countdown-grid {
+    display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;
+  }
+  .count-box {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 4px; padding: 24px 20px; min-width: 80px;
+  }
+  .count-num {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem,7vw,3.5rem);
+    font-weight: 300; color: var(--gold-light); line-height: 1; display: block;
+  }
+  .count-label {
+    font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(184,212,168,0.7); margin-top: 8px; display: block;
+  }
+  .countdown-done {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 1.6rem; color: var(--gold-light);
+  }
+
+  /* DETAIL */
+  .detail-section { padding: 80px 24px; text-align: center; background: var(--off-white); }
+  .detail-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+    gap: 28px; max-width: 740px; margin: 0 auto;
+  }
+  .detail-card {
+    background: var(--cream); border: 1px solid rgba(201,168,76,0.2); border-radius: 4px;
+    padding: 32px 20px; position: relative;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .detail-card.visible { opacity: 1; transform: translateY(0); }
+  .detail-card:nth-child(2) { transition-delay: 0.12s; }
+  .detail-card:nth-child(3) { transition-delay: 0.24s; }
+  .detail-card::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 36px; height: 2px; background: var(--gold);
+  }
+  .detail-icon { width: 30px; height: 30px; margin: 0 auto 14px; color: var(--matcha); }
+  .detail-label { font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--matcha-deep); margin-bottom: 10px; }
+  .detail-value { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 500; line-height: 1.5; color: var(--text-dark); }
+  .detail-sub { font-size: 0.8rem; color: var(--text-mid); margin-top: 6px; }
+
+  /* MAPS BUTTON */
+  .maps-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 36px; padding: 14px 32px;
+    background: transparent; border: 1px solid var(--gold);
+    color: var(--gold); font-family: 'Lato', sans-serif; font-size: 0.72rem;
+    letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none;
+    border-radius: 2px; cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+  }
+  .maps-btn:hover { background: var(--gold); color: var(--off-white); }
+  .maps-btn svg { width: 16px; height: 16px; }
+
+  /* RSVP */
+  .rsvp-section { padding: 80px 24px; text-align: center; background: var(--cream); }
+  .rsvp-form { max-width: 480px; margin: 0 auto; }
+  .form-group { margin-bottom: 20px; text-align: left; }
+  .form-group label {
+    display: block; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--matcha-deep); margin-bottom: 8px;
+  }
+  .form-group input, .form-group select {
+    width: 100%; padding: 12px 16px;
+    background: var(--off-white); border: 1px solid rgba(107,140,90,0.3);
+    border-radius: 2px; font-family: 'Lato', sans-serif; font-size: 0.9rem;
+    color: var(--text-dark); outline: none;
+    transition: border-color 0.3s;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--gold); }
+  .rsvp-btn {
+    width: 100%; padding: 14px;
+    background: var(--matcha-deep); color: var(--off-white);
+    border: none; border-radius: 2px; font-family: 'Lato', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.3s;
+    margin-top: 8px;
+  }
+  .rsvp-btn:hover { background: var(--matcha); }
+  .rsvp-success {
+    display: none; background: var(--matcha-light); border-radius: 4px;
+    padding: 20px; margin-top: 20px; text-align: center;
+  }
+  .rsvp-success p { font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--matcha-deep); font-size: 1.1rem; }
+  .rsvp-list-section { margin-top: 48px; }
+  .rsvp-list-title {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--matcha-deep);
+    margin-bottom: 20px;
+  }
+  .rsvp-table {
+    width: 100%; max-width: 600px; margin: 0 auto;
+    border-collapse: collapse; font-size: 0.85rem;
+  }
+  .rsvp-table th {
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--matcha-deep); padding: 8px 12px; border-bottom: 1px solid rgba(107,140,90,0.3);
+    text-align: left;
+  }
+  .rsvp-table td { padding: 10px 12px; border-bottom: 1px solid rgba(107,140,90,0.1); }
+  .badge {
+    display: inline-block; padding: 2px 10px; border-radius: 20px;
+    font-size: 0.68rem; letter-spacing: 0.1em;
+  }
+  .badge-hadir { background: var(--matcha-light); color: var(--matcha-deep); }
+  .badge-tidak { background: #FFECEC; color: #A04040; }
+
+  /* AMPLOP / HADIAH */
+  .gift-section {
+    background: var(--off-white); padding: 80px 24px; text-align: center;
+  }
+  .envelope-wrap { max-width: 500px; margin: 0 auto; }
+  .envelope {
+    background: var(--cream); border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 4px; overflow: hidden; margin-bottom: 24px;
+    box-shadow: 0 4px 24px rgba(107,140,90,0.08);
+  }
+  .envelope-flap {
+    background: var(--matcha-deep); padding: 28px 32px; position: relative;
+    text-align: center;
+  }
+  .envelope-flap::after {
+    content: ''; position: absolute; bottom: -28px; left: 0; right: 0;
+    height: 56px;
+    background: var(--matcha-deep);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+  .envelope-icon { color: var(--gold-light); font-size: 2rem; margin-bottom: 8px; }
+  .envelope-flap-text {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 1.1rem; color: rgba(255,255,255,0.85);
+  }
+  .envelope-body { padding: 48px 32px 32px; }
+  .bank-item {
+    border: 1px solid rgba(107,140,90,0.2); border-radius: 4px;
+    padding: 20px 24px; margin-bottom: 16px; text-align: left; position: relative;
+  }
+  .bank-name {
+    font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--matcha); margin-bottom: 6px;
+  }
+  .bank-holder { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 500; color: var(--text-dark); }
+  .bank-number { font-size: 1rem; color: var(--matcha-deep); letter-spacing: 0.12em; margin-top: 4px; }
+  .copy-btn {
+    position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    background: transparent; border: 1px solid var(--matcha-pale);
+    border-radius: 2px; padding: 6px 12px; font-size: 0.62rem;
+    letter-spacing: 0.15em; text-transform: uppercase; color: var(--matcha-deep);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .copy-btn:hover { background: var(--matcha-pale); }
+  .copy-btn.copied { background: var(--matcha-light); border-color: var(--matcha); }
+  .gift-note {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 0.95rem; color: var(--text-mid); text-align: center; margin-top: 8px; line-height: 1.7;
+  }
+
+  /* QR CODE */
+  .qr-section { padding: 72px 24px; text-align: center; background: var(--cream); }
+  .qr-wrap {
+    max-width: 280px; margin: 0 auto; background: var(--off-white);
+    border: 1px solid rgba(201,168,76,0.2); border-radius: 4px; padding: 32px;
+  }
+  #qr-code { margin: 0 auto 20px; display: flex; justify-content: center; }
+  .qr-label {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--matcha-deep); margin-bottom: 8px;
+  }
+  .qr-url { font-size: 0.75rem; color: var(--matcha); word-break: break-all; }
+
+  /* CLOSING */
+  .closing-section {
+    background: var(--matcha-deep); padding: 80px 24px; text-align: center; position: relative; overflow: hidden;
+  }
+  .closing-section::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .closing-names {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem,7vw,3.8rem);
+    font-weight: 300; color: var(--off-white); letter-spacing: 0.04em;
+    margin-bottom: 8px;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .closing-names.visible { opacity: 1; transform: translateY(0); }
+  .closing-names em { color: var(--gold-light); font-style: italic; }
+  .closing-msg {
+    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(253,250,245,0.5); margin-top: 20px;
+    opacity: 0; transition: opacity 0.8s ease 0.3s;
+  }
+  .closing-msg.visible { opacity: 1; }
+  .closing-doa {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: clamp(0.95rem,2.5vw,1.1rem); color: rgba(253,250,245,0.75);
+    max-width: 480px; margin: 20px auto 0; line-height: 1.8;
+    opacity: 0; transition: opacity 0.8s ease 0.5s;
+  }
+  .closing-doa.visible { opacity: 1; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(6px); } }
+
+  @media (max-width: 480px) {
+    .botanical-top, .botanical-bottom { width: 150px; }
+    .frame-tl,.frame-tr,.frame-bl,.frame-br { width: 36px; height: 36px; }
+    .envelope-body { padding: 48px 16px 24px; }
+    .copy-btn { position: static; margin-top: 10px; display: block; text-align: center; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,*::before,*::after { animation: none !important; transition: none !important; }
+    .bismillah,.hero-label,.names,.gold-line,.hero-date,.scroll-hint { opacity:1; }
+  }
+
+  /* SPLASH SCREEN */
+  #splash {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--matcha-deep);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 40px;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  #splash.hide { opacity: 0; visibility: hidden; }
+  .splash-bismillah {
+    font-family: 'Amiri', serif; font-size: clamp(1.6rem,5vw,2.4rem);
+    color: var(--gold-light); margin-bottom: 32px;
+    animation: fadeUp 1s ease 0.2s both;
+  }
+  .splash-title {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300;
+    font-size: clamp(2.2rem,8vw,4rem); color: var(--off-white);
+    line-height: 1.1; animation: fadeUp 1s ease 0.5s both;
+  }
+  .splash-title em { color: var(--gold-light); font-style: italic; }
+  .splash-sub {
+    font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: rgba(184,212,168,0.7); margin-top: 16px;
+    animation: fadeUp 1s ease 0.7s both;
+  }
+  .splash-btn {
+    margin-top: 48px; padding: 16px 44px;
+    background: transparent; border: 1px solid var(--gold);
+    color: var(--gold-light); font-family: 'Lato', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase;
+    cursor: pointer; border-radius: 2px;
+    transition: background 0.3s, color 0.3s;
+    animation: fadeIn 1s ease 1.2s both;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .splash-btn:hover { background: var(--gold); color: var(--matcha-deep); }
+  .splash-btn svg { width: 18px; height: 18px; }
+  .splash-note {
+    font-size: 0.65rem; color: rgba(184,212,168,0.5);
+    margin-top: 16px; letter-spacing: 0.1em;
+    animation: fadeIn 1s ease 1.4s both;
+  }
+
+  /* MUSIC PLAYER */
+  #music-player {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    z-index: 100; display: flex; align-items: center; gap: 12px;
+    background: rgba(74,102,64,0.92); backdrop-filter: blur(8px);
+    border: 1px solid rgba(201,168,76,0.3); border-radius: 40px;
+    padding: 10px 20px 10px 14px;
+    box-shadow: 0 4px 20px rgba(36,48,32,0.25);
+    opacity: 0; transition: opacity 0.6s ease;
+  }
+  #music-player.visible { opacity: 1; }
+  .music-toggle {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--gold); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.2s;
+  }
+  .music-toggle:hover { background: var(--gold-light); }
+  .music-toggle svg { width: 16px; height: 16px; color: var(--matcha-deep); }
+  .music-info { display: flex; flex-direction: column; gap: 2px; }
+  .music-title { font-size: 0.68rem; color: var(--matcha-light); letter-spacing: 0.1em; }
+  .music-wave {
+    display: flex; align-items: flex-end; gap: 2px; height: 14px;
+  }
+  .music-wave span {
+    display: block; width: 3px; background: var(--gold);
+    border-radius: 2px; opacity: 0.7;
+    animation: wave 1s ease-in-out infinite;
+  }
+  .music-wave span:nth-child(1) { height: 6px; animation-delay: 0s; }
+  .music-wave span:nth-child(2) { height: 10px; animation-delay: 0.15s; }
+  .music-wave span:nth-child(3) { height: 14px; animation-delay: 0.3s; }
+  .music-wave span:nth-child(4) { height: 8px; animation-delay: 0.45s; }
+  .music-wave span:nth-child(5) { height: 12px; animation-delay: 0.6s; }
+  .music-wave.paused span { animation-play-state: paused; opacity: 0.3; }
+
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.4); }
+    50%       { transform: scaleY(1); }
+  }
+</style>
+</head>
+<body>
+
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <p class="splash-bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
+  <h1 class="splash-title"><em>Muhammad</em><br>&amp;<br><em>Nura</em></h1>
+  <p class="splash-sub">21 Agustus 2027 · The Langham Jakarta</p>
+  <button class="splash-btn" onclick="openInvitation()">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    Buka Undangan
+  </button>
+  <p class="splash-note">🎵 Wedding Nasheed · Muhammad Al-Muqit</p>
+</div>
+
+<!-- MUSIC PLAYER -->
+<div id="music-player">
+  <button class="music-toggle" onclick="toggleMusic()" title="Play/Pause">
+    <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+  </button>
+  <div class="music-info">
+    <span class="music-title">عروسة النور · Muhammad Al-Muqit</span>
+    <div class="music-wave" id="music-wave">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+</div>
+
+<!-- Audio: Wedding Nasheed - Muhammad Al-Muqit (عروسة النور) via Internet Archive -->
+<audio id="bg-music" loop>
+  <source src="https://archive.org/download/y-2mate.com-new-wedding-nasheed-music-free-muhammad-al-muqit/y2mate.com%20-%20New%20Wedding%20Nasheed%20Music%20Free%20%D9%85%D8%AD%D9%85%D8%AF%20%D8%A7%D9%84%D9%85%D9%82%D9%8A%D8%B7%20%D8%B9%D8%B1%D9%88%D8%B3%D8%A9%20%D8%A7%D9%84%D9%86%D9%88%D8%B1%20Muhammad%20al%20Muqit.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Gold corner frames -->
+<div class="frame-border frame-tl"></div>
+<div class="frame-border frame-tr"></div>
+<div class="frame-border frame-bl"></div>
+<div class="frame-border frame-br"></div>
+
+<!-- Botanical -->
+<svg class="botanical-top" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g opacity="0.9">
+    <ellipse cx="60" cy="180" rx="18" ry="48" fill="#6B8C5A" transform="rotate(-40 60 180)"/>
+    <ellipse cx="90" cy="150" rx="14" ry="38" fill="#4A6640" transform="rotate(-20 90 150)"/>
+    <ellipse cx="40" cy="140" rx="12" ry="32" fill="#B8D4A8" transform="rotate(-55 40 140)"/>
+    <ellipse cx="120" cy="130" rx="10" ry="26" fill="#7FA06A" transform="rotate(-10 120 130)"/>
+    <ellipse cx="70" cy="100" rx="9" ry="22" fill="#4A6640" transform="rotate(-30 70 100)"/>
+    <line x1="60" y1="200" x2="120" y2="100" stroke="#4A6640" stroke-width="1.5" opacity="0.5"/>
+    <line x1="90" y1="190" x2="140" y2="120" stroke="#6B8C5A" stroke-width="1" opacity="0.4"/>
+    <circle cx="130" cy="95" r="4" fill="#C9A84C" opacity="0.7"/>
+    <circle cx="115" cy="80" r="3" fill="#C9A84C" opacity="0.5"/>
+    <circle cx="145" cy="108" r="3" fill="#E4C97A" opacity="0.6"/>
+  </g>
+</svg>
+<svg class="botanical-bottom" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g opacity="0.9">
+    <ellipse cx="60" cy="180" rx="18" ry="48" fill="#6B8C5A" transform="rotate(-40 60 180)"/>
+    <ellipse cx="90" cy="150" rx="14" ry="38" fill="#4A6640" transform="rotate(-20 90 150)"/>
+    <ellipse cx="40" cy="140" rx="12" ry="32" fill="#B8D4A8" transform="rotate(-55 40 140)"/>
+    <ellipse cx="120" cy="130" rx="10" ry="26" fill="#7FA06A" transform="rotate(-10 120 130)"/>
+    <circle cx="130" cy="95" r="4" fill="#C9A84C" opacity="0.7"/>
+    <circle cx="115" cy="80" r="3" fill="#C9A84C" opacity="0.5"/>
+  </g>
+</svg>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
+  <p class="hero-label">Dengan penuh syukur & kebahagiaan, kami mengundang</p>
+  <h1 class="names">
+    Muhammad
+    <span class="amp">&</span>
+    Nura
+  </h1>
+  <div class="gold-line"></div>
+  <p class="hero-date">Jumat, 21 Agustus 2027</p>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<!-- ORANG TUA -->
+<section class="parents-section">
+  <p class="section-eyebrow">Putra & Putri dari</p>
+  <h2 class="section-title">Keluarga Kami</h2>
+  <div class="parents-grid">
+    <div class="parent-block">
+      <p class="parent-role">Mempelai Pria</p>
+      <p class="child-name">Muhammad</p>
+      <p class="child-sub">Putra dari</p>
+      <p class="parent-name">Bapak Abdullah<br>& Ibu Aminah</p>
+    </div>
+    <div class="parents-divider"></div>
+    <div class="parent-block">
+      <p class="parent-role">Mempelai Wanita</p>
+      <p class="child-name">Nura</p>
+      <p class="child-sub">Putri dari</p>
+      <p class="parent-name">Bapak Edih<br>& Ibu Fatimah</p>
+    </div>
+  </div>
+</section>
+
+<!-- AYAT -->
+<section class="ayat-section">
+  <div class="ayat-block">
+    <p class="ayat-ref">QS. Ar-Rūm · 21</p>
+    <p class="ayat-arabic">وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ</p>
+    <div class="ayat-divider"></div>
+    <p class="ayat-terjemah">"Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang."</p>
+  </div>
+  <div class="ayat-block">
+    <p class="ayat-ref">QS. An-Nūr · 26</p>
+    <p class="ayat-arabic">الْخَبِيثَاتُ لِلْخَبِيثِينَ وَالْخَبِيثُونَ لِلْخَبِيثَاتِ ۖ وَالطَّيِّبَاتُ لِلطَّيِّبِينَ وَالطَّيِّبُونَ لِلطَّيِّبَاتِ</p>
+    <div class="ayat-divider"></div>
+    <p class="ayat-terjemah">"Perempuan-perempuan yang baik untuk laki-laki yang baik, dan laki-laki yang baik untuk perempuan-perempuan yang baik pula."</p>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<section class="countdown-section">
+  <p class="countdown-title">Menghitung Hari Menuju Hari Istimewa</p>
+  <div class="countdown-grid" id="countdown-grid">
+    <div class="count-box"><span class="count-num" id="cd-hari">--</span><span class="count-label">Hari</span></div>
+    <div class="count-box"><span class="count-num" id="cd-jam">--</span><span class="count-label">Jam</span></div>
+    <div class="count-box"><span class="count-num" id="cd-menit">--</span><span class="count-label">Menit</span></div>
+    <div class="count-box"><span class="count-num" id="cd-detik">--</span><span class="count-label">Detik</span></div>
+  </div>
+  <p class="countdown-done" id="countdown-done" style="display:none;">🌿 Alhamdulillah, hari bahagia telah tiba!</p>
+</section>
+
+<!-- DETAIL ACARA -->
+<section class="detail-section">
+  <p class="section-eyebrow">Detail Acara</p>
+  <h2 class="section-title">Hari Bahagia Kami</h2>
+  <div class="detail-grid">
+    <div class="detail-card">
+      <svg class="detail-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2">
+        <rect x="4" y="6" width="24" height="22" rx="2"/><line x1="4" y1="12" x2="28" y2="12"/>
+        <line x1="11" y1="3" x2="11" y2="9"/><line x1="21" y1="3" x2="21" y2="9"/>
+        <rect x="10" y="17" width="4" height="4" rx="0.5"/>
+      </svg>
+      <p class="detail-label">Tanggal</p>
+      <p class="detail-value">Jumat<br>21 Agustus 2027</p>
+    </div>
+    <div class="detail-card">
+      <svg class="detail-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2">
+        <circle cx="16" cy="16" r="12"/>
+        <line x1="16" y1="8" x2="16" y2="16"/><line x1="16" y1="16" x2="21" y2="20"/>
+      </svg>
+      <p class="detail-label">Waktu</p>
+      <p class="detail-value">09.00 WIB</p>
+      <p class="detail-sub">hingga selesai</p>
+    </div>
+    <div class="detail-card">
+      <svg class="detail-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M16 3C11.03 3 7 7.03 7 12c0 7 9 17 9 17s9-10 9-17c0-4.97-4.03-9-9-9z"/>
+        <circle cx="16" cy="12" r="3"/>
+      </svg>
+      <p class="detail-label">Lokasi</p>
+      <p class="detail-value">The Langham</p>
+      <p class="detail-sub">Jakarta</p>
+    </div>
+  </div>
+  <a href="https://maps.google.com/?q=The+Langham+Jakarta" target="_blank" class="maps-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+      <circle cx="12" cy="9" r="2.5"/>
+    </svg>
+    Buka Google Maps
+  </a>
+</section>
+
+<!-- RSVP -->
+<section class="rsvp-section">
+  <p class="section-eyebrow">Konfirmasi Kehadiran</p>
+  <h2 class="section-title">Apakah Anda Hadir?</h2>
+  <div class="rsvp-form">
+    <div class="form-group">
+      <label>Nama Lengkap</label>
+      <input type="text" id="rsvp-nama" placeholder="Masukkan nama Anda">
+    </div>
+    <div class="form-group">
+      <label>Asal Kota / Lokasi</label>
+      <input type="text" id="rsvp-lokasi" placeholder="Contoh: Bandung, Jakarta Selatan...">
+    </div>
+    <div class="form-group">
+      <label>Konfirmasi Kehadiran</label>
+      <select id="rsvp-hadir">
+        <option value="">— Pilih —</option>
+        <option value="hadir">✅ Insya Allah Hadir</option>
+        <option value="tidak">❌ Tidak Bisa Hadir</option>
+      </select>
+    </div>
+    <button class="rsvp-btn" onclick="submitRSVP()">Kirim Konfirmasi</button>
+    <div class="rsvp-success" id="rsvp-success">
+      <p>Jazakallahu khairan 🌿<br>Konfirmasi Anda telah kami terima.</p>
+    </div>
+  </div>
+
+  <div class="rsvp-list-section" id="rsvp-list-section" style="display:none;">
+    <div class="gold-line" style="opacity:1; margin-bottom:32px;"></div>
+    <p class="rsvp-list-title">Daftar Tamu</p>
+    <table class="rsvp-table">
+      <thead><tr><th>#</th><th>Nama</th><th>Lokasi</th><th>Status</th></tr></thead>
+      <tbody id="rsvp-tbody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- AMPLOP / GIFT -->
+<section class="gift-section">
+  <p class="section-eyebrow">Wedding Gift</p>
+  <h2 class="section-title">Amplop Digital</h2>
+  <div class="envelope-wrap">
+    <div class="envelope">
+      <div class="envelope-flap">
+        <div class="envelope-icon">💌</div>
+        <p class="envelope-flap-text">Doa & hadiah terbaik Anda<br>adalah kebahagiaan kami</p>
+      </div>
+      <div class="envelope-body">
+        <div class="bank-item">
+          <p class="bank-name">BCA</p>
+          <p class="bank-holder">Muhammad</p>
+          <p class="bank-number">1234 5678 90</p>
+          <button class="copy-btn" onclick="copyBank(this, '1234567890')">Salin</button>
+        </div>
+        <div class="bank-item">
+          <p class="bank-name">Mandiri</p>
+          <p class="bank-holder">Nura</p>
+          <p class="bank-number">0987 6543 210</p>
+          <button class="copy-btn" onclick="copyBank(this, '09876543210')">Salin</button>
+        </div>
+        <div class="bank-item">
+          <p class="bank-name">GoPay / OVO</p>
+          <p class="bank-holder">Muhammad</p>
+          <p class="bank-number">0812 3456 7890</p>
+          <button class="copy-btn" onclick="copyBank(this, '081234567890')">Salin</button>
+        </div>
+      </div>
+    </div>
+    <p class="gift-note">Kehadiran dan doa Anda adalah hadiah terindah bagi kami. Terima kasih atas segala kebaikan hati Anda. 🌿</p>
+  </div>
+</section>
+
+<!-- QR CODE -->
+<section class="qr-section">
+  <p class="section-eyebrow">Undangan Digital</p>
+  <h2 class="section-title" style="margin-bottom:32px;">Scan QR Code</h2>
+  <div class="qr-wrap">
+    <div id="qr-code"></div>
+    <p class="qr-label">Bagikan Undangan Ini</p>
+    <p class="qr-url" id="qr-url-text"></p>
+  </div>
+  <p style="font-size:0.8rem;color:var(--matcha);margin-top:16px;font-style:italic;">Scan untuk membuka undangan ini di perangkat lain</p>
+</section>
+
+<!-- CLOSING -->
+<section class="closing-section">
+  <p class="closing-names"><em>Muhammad</em> & <em>Nura</em></p>
+  <p class="closing-msg">Menikah · 21 Agustus 2027 · The Langham Jakarta</p>
+  <p class="closing-doa">
+    Kami memohon doa restu dan kehadiran Bapak/Ibu/Saudara/i<br>
+    dalam momen terindah dalam hidup kami.<br><br>
+    <em>Barakallahu lana wa lakum.</em>
+  </p>
+</section>
+
+<script>
+// SPLASH + MUSIC
+function openInvitation() {
+  const splash = document.getElementById('splash');
+  const music = document.getElementById('bg-music');
+  const player = document.getElementById('music-player');
+  splash.classList.add('hide');
+  setTimeout(() => { splash.style.display = 'none'; }, 800);
+  music.volume = 0.4;
+  music.play().catch(() => {});
+  setTimeout(() => { player.classList.add('visible'); }, 1200);
+}
+
+let isPlaying = true;
+function toggleMusic() {
+  const music = document.getElementById('bg-music');
+  const wave = document.getElementById('music-wave');
+  const iconPlay = document.getElementById('icon-play');
+  const iconPause = document.getElementById('icon-pause');
+  if (isPlaying) {
+    music.pause();
+    wave.classList.add('paused');
+    iconPlay.style.display = 'block';
+    iconPause.style.display = 'none';
+  } else {
+    music.play();
+    wave.classList.remove('paused');
+    iconPlay.style.display = 'none';
+    iconPause.style.display = 'block';
+  }
+  isPlaying = !isPlaying;
+}
+
+// RSVP
+let rsvpList = JSON.parse(localStorage.getItem('rsvp_list') || '[]');
+
+function renderRSVP() {
+  const tbody = document.getElementById('rsvp-tbody');
+  const section = document.getElementById('rsvp-list-section');
+  if (rsvpList.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  tbody.innerHTML = rsvpList.map((r, i) => `
+    <tr>
+      <td style="color:var(--matcha);font-size:0.8rem;">${i+1}</td>
+      <td style="font-family:'Cormorant Garamond',serif;font-size:1rem;">${r.nama}</td>
+      <td style="font-size:0.85rem;color:var(--text-mid);">${r.lokasi}</td>
+      <td><span class="badge ${r.hadir === 'hadir' ? 'badge-hadir' : 'badge-tidak'}">${r.hadir === 'hadir' ? 'Hadir' : 'Tidak Hadir'}</span></td>
+    </tr>
+  `).join('');
+}
+
+function submitRSVP() {
+  const nama = document.getElementById('rsvp-nama').value.trim();
+  const lokasi = document.getElementById('rsvp-lokasi').value.trim();
+  const hadir = document.getElementById('rsvp-hadir').value;
+  if (!nama || !lokasi || !hadir) { alert('Mohon lengkapi semua isian ya 🌿'); return; }
+  rsvpList.push({ nama, lokasi, hadir });
+  localStorage.setItem('rsvp_list', JSON.stringify(rsvpList));
+  document.getElementById('rsvp-success').style.display = 'block';
+  document.getElementById('rsvp-nama').value = '';
+  document.getElementById('rsvp-lokasi').value = '';
+  document.getElementById('rsvp-hadir').value = '';
+  renderRSVP();
+  setTimeout(() => document.getElementById('rsvp-success').style.display = 'none', 4000);
+}
+
+// COPY BANK
+function copyBank(btn, number) {
+  navigator.clipboard.writeText(number).then(() => {
+    btn.textContent = 'Tersalin ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// COUNTDOWN
+function updateCountdown() {
+  const target = new Date('2027-08-21T09:00:00+07:00');
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) {
+    document.getElementById('countdown-grid').style.display = 'none';
+    document.getElementById('countdown-done').style.display = 'block';
+    return;
+  }
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins = Math.floor((diff % 3600000) / 60000);
+  const secs = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-hari').textContent = String(days).padStart(2,'0');
+  document.getElementById('cd-jam').textContent = String(hours).padStart(2,'0');
+  document.getElementById('cd-menit').textContent = String(mins).padStart(2,'0');
+  document.getElementById('cd-detik').textContent = String(secs).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// QR CODE
+const pageUrl = window.location.href;
+document.getElementById('qr-url-text').textContent = pageUrl;
+new QRCode(document.getElementById('qr-code'), {
+  text: pageUrl,
+  width: 160, height: 160,
+  colorDark: '#4A6640',
+  colorLight: '#FAFCF5',
+  correctLevel: QRCode.CorrectLevel.M
+});
+
+// SCROLL OBSERVER
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.ayat-block, .detail-card, .closing-names, .closing-msg, .closing-doa').forEach(el => observer.observe(el));
+
+// INIT
+renderRSVP();
+</script>
+</body>
+</html>
